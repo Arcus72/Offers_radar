@@ -1,0 +1,19 @@
+services:
+  db:
+    image: postgres:17
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db_backup:/db_backup
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d accdata"]
+      interval: 10s
+      retries: 10
+
+volumes:
+  postgres_data:

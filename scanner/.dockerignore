@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+logs/
+.env
+.git/
+.vscode/
+.idea/
+Dockerfile
+.dockerignore

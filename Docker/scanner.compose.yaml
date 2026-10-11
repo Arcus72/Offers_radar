@@ -1,0 +1,31 @@
+services:
+  app:
+    build: ./scanner
+    profiles:
+      - dev
+
+    depends_on:
+      db:
+        condition: service_healthy
+      ollama:
+        condition: service_healthy
+
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - PYTHONUNBUFFERED=1
+      - DB_NAME=accdata
+      - DB_USER=postgres
+      - DB_PASS=1234
+      - DB_HOST=db
+      - DB_PORT=5432
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./scanner
+          target: /app
+          ignore:
+            - .venv/
+            - __pycache__/
+            - logs/
+        - action: rebuild
+          path: ./scanner/uv.lock

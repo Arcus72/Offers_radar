@@ -1,0 +1,9 @@
+include:
+  - path: Docker/ollama.compose.yaml
+    project_directory: .
+  - path: Docker/postgress.compose.yaml
+    project_directory: .
+  - path: Docker/airflow.compose.yaml
+    project_directory: .
+  - path: Docker/scanner.compose.yaml
+    project_directory: .
