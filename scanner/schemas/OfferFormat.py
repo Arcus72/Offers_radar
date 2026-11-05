@@ -57,7 +57,7 @@ class ResponseFormat(BaseModel):
     city_center: bool | None = Field(description="Czy nieruchomość jest blisko centrum miasta, np. rynku lub głównej ulicy")
     city_center_dist: int | None = Field(description="Odległość do centrum miasta w metrach, tylko jeśli podano ją w ogłoszeniu; dla zakresu większa wartość, np. '100-200 m' -> 200")
 
-class OfferFormat(ResponseFormat):
+class FiltersFormat(ResponseFormat):
     title: str | None = Field(description="Tytuł ogłoszenia przepisany bez zmian")
     price: int | None = Field(description="Cena nieruchomości w zł jako liczba całkowita bez spacji, np. '359 000 zł' -> 359000")
     offer_id: int

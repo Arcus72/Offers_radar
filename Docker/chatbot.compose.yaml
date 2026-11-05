@@ -1,0 +1,31 @@
+services:
+  chatbot:
+    build: ./chatbot
+    stdin_open: true
+    tty: true
+    profiles:
+      - chatbot
+      - prod
+
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - PYTHONUNBUFFERED=1
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./chatbot
+          target: /app
+          ignore:
+            - .venv/
+            - __pycache__/
+            - logs/
+        - action: rebuild
+          path: ./chatbot/uv.lock

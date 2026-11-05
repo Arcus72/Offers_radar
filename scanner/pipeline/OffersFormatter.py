@@ -1,6 +1,7 @@
 from components.LlmFormatter import LlmFormatter
-from schemas.OfferFormat import OfferFormat, ResponseFormat
+from schemas.OfferFormat import FiltersFormat, ResponseFormat
 from pipeline.PipelineTemplate import PipelineTemplate
+import time
 
 class OffersFormatter(PipelineTemplate):
     TABLE = "offers"
@@ -11,11 +12,11 @@ class OffersFormatter(PipelineTemplate):
         self.db = db
         self.llm_formatter = LlmFormatter(ResponseFormat)
         self.raw_offers: list[dict] = []
-        self.structured_offers: list[OfferFormat] = []
+        self.structured_offers: list[FiltersFormat] = []
 
     def extract(self):
         self.raw_offers = self.db.get_all_data(self.RAW_TABLE)
-     
+
 
     def transform(self, save_to_db: bool = True):
         for offer_i, offer in enumerate(self.raw_offers, start=1):
@@ -28,7 +29,7 @@ class OffersFormatter(PipelineTemplate):
                 else:
                     formatted_desc = dict.fromkeys(ResponseFormat.model_fields)
 
-                row = OfferFormat(
+                row = FiltersFormat(
                     **formatted_desc,
                     offer_id=str(offer["offer_id"]),
                     main_img_url=offer["main_img_url"],
@@ -36,7 +37,6 @@ class OffersFormatter(PipelineTemplate):
                     price=offer["price"],
                 )
             except Exception as e:
-                # one bad LLM answer must not lose the whole batch; the offer is retried on the next run
                 print(f"Formatting failed for offer {offer['offer_id']}. Skipping. {e}")
                 continue
 
@@ -45,7 +45,7 @@ class OffersFormatter(PipelineTemplate):
             else:
                 self.structured_offers.append(row)
 
-    
+
 
     def load(self):
         return

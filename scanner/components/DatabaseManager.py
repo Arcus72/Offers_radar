@@ -2,9 +2,11 @@ import typing
 import psycopg2
 from pydantic import BaseModel
 from datetime import date, datetime
-from schemas.OfferFormat import OfferFormat
+from schemas.OfferFormat import FiltersFormat
 from schemas.RawOfferData import RawOfferData
 from psycopg2.extras import execute_values, RealDictCursor
+
+
 class DatabaseManager:
     PG_TYPES = {str: "TEXT", int: "INTEGER", float: "DOUBLE PRECISION", bool: "BOOLEAN", date: "DATE",  datetime: "TIMESTAMP",}
 
@@ -16,7 +18,7 @@ class DatabaseManager:
         )
         self.cur = self.conn.cursor()
 
-        self.create_table(OfferFormat, "offers")
+        self.create_table(FiltersFormat, "offers")
         self.create_table(RawOfferData, "raw_offers")
 
 
@@ -112,7 +114,7 @@ class DatabaseManager:
             self.cur.execute(query, params)
             self.conn.commit()
         except psycopg2.Error:
-            self.conn.rollback() 
+            self.conn.rollback()
             raise
 
     def close(self) -> None:

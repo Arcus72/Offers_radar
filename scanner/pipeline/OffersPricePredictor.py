@@ -3,7 +3,7 @@ import pandas as pd
 import joblib
 
 
-from schemas.OfferFormat import OfferFormat
+from schemas.OfferFormat import FiltersFormat
 from pipeline.PipelineTemplate import PipelineTemplate
 
 
@@ -21,7 +21,7 @@ class OffersPricePredictor(PipelineTemplate):
 
     def transform(self) :
         if not self.rows:
-            return 
+            return
 
         expected_columns = self.pipeline.feature_names_in_
 
@@ -30,8 +30,8 @@ class OffersPricePredictor(PipelineTemplate):
 
         # Make prediction
         self.market_prices = self.pipeline.predict(offer_df).round().astype(int).tolist()
-        
-     
+
+
     def load(self):
         if not self.market_prices:
             return
@@ -39,4 +39,3 @@ class OffersPricePredictor(PipelineTemplate):
         offer_ids = [offer["offer_id"] for offer in self.rows]
         self.db.update_column(list(zip(offer_ids, self.market_prices)), "market_price", self.TABLE)
 
-        

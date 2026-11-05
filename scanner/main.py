@@ -20,8 +20,8 @@ if __name__ == "__main__":
     db_host = os.getenv('DB_HOST')
     db_port = os.getenv('DB_PORT')
 
-    UPDATE_PRICES = True
-    TRAIN_PIPELINE = True
+    UPDATE_PRICES = False
+    TRAIN_PIPELINE = False
 
 
     with DatabaseManager(db_name, db_user, db_pass, db_host, db_port) as db:
@@ -32,8 +32,8 @@ if __name__ == "__main__":
 
         print("Scanning for new offers")
         db.clear_table(OffersCollector.TABLE)
-        OffersCollector(db, mode="NEW", limit=5).run()
-    
+        OffersCollector(db, mode="NEW", limit=100).run()
+
         print("Formatting new offers")
         OffersFormatter(db).run()
         db.clear_table(OffersCollector.TABLE)
@@ -41,6 +41,6 @@ if __name__ == "__main__":
         if TRAIN_PIPELINE:
             print("Training new model")
             OffersPredictorTrainer(db).run()
-           
+
         print("Market price predicting")
         OffersPricePredictor(db).run()

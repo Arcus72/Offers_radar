@@ -1,7 +1,9 @@
 
 from typing import Generic, TypeVar
-from langchain_ollama import ChatOllama
 from pydantic import BaseModel
+from langchain_google_genai import ChatGoogleGenerativeAI
+
+
 import os
 
 T = TypeVar("T", bound=BaseModel)
@@ -16,12 +18,10 @@ SYSTEM_PROMPT = (
 
 class LlmFormatter(Generic[T]):
     def __init__(self, response_format: type[T]):
-        llm = ChatOllama(
-            model="qwen3.5:9b",
-            base_url=os.environ["OLLAMA_BASE_URL"],
-            reasoning=False,
+        llm = ChatGoogleGenerativeAI(
+            model="gemini-3.8-flash",
+            google_api_key=os.environ["GEMINI_API_KEY"],
             temperature=0,
-            num_ctx=8192,
         )
         self.response_format = response_format
         props = response_format.model_json_schema()["properties"]

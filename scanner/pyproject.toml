@@ -2,10 +2,14 @@
 name = "scanner"
 version = "0.1.0"
 requires-python = ">=3.11"
+authors = [
+    { name = "Arcus72", email = "kimla.maciej72@gmail.com" }
+]
 dependencies = [
     "beautifulsoup4==4.15.0",
+    "dill>=0.4.1",
     "joblib==1.5.2",
-    "langchain-ollama==1.1.0",
+    "langchain-google-genai>=4.4.2",
     "pandas==2.3.3",
     "psycopg2-binary==2.9.12",
     "pydantic==2.13.5",

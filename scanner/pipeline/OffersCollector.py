@@ -18,7 +18,6 @@ class OffersCollector(PipelineTemplate):
         self.limit = limit
         self.collected_offers_id = db.get_all_offers_id("offers")
         print(f"Collected offers id: {len(self.collected_offers_id)}")
-        print(list(self.collected_offers_id)[:10])
         self.new_offers: list[RawOfferData] = []
 
 
@@ -41,12 +40,12 @@ class OffersCollector(PipelineTemplate):
             print(f"total: {len(self.collected_offers_id)}, stop at: {self.limit}")
         else:
             print(f"new: {len(self.new_offers)}")
-        
+
 
     def extract(self):
 
         if self.is_limit_reached():
-            return 
+            return
 
         # 100 pages * 30 offers = 3000 entries
         page = 1
@@ -91,7 +90,7 @@ class OffersCollector(PipelineTemplate):
         return
 
     def transform(self):
-        return 
+        return
 
 
     def load(self) -> list[int]:

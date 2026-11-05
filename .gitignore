@@ -6,3 +6,4 @@ venv/
 .vscode/
 .idea/
 scanner/logs/
+TODO.txt

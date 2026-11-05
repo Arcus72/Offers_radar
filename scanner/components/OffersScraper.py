@@ -3,17 +3,18 @@ import time
 import requests
 from bs4 import BeautifulSoup
 from schemas.RawOfferData import RawOfferData
-from schemas.OfferFormat import OfferFormat
+from schemas.OfferFormat import FiltersFormat
 
 class OffersScraper:
 	SELECTORS = {
-	"title": ".t_o5gR4J",
-	"price": ".t_yBEtHn",
-	"description": ".t_1HMhyB",
-	"basic_params": ".t_KgnU-a",
-	"detailed_params": ".t_-deJfz",
-	"localization": ".t_DfKH5W",
-	"main_img": ".t_-nZCVz img"
+	"title": ".bsTssW_nazwa__h1",
+	"price": "._7gn6ra_cena__calkowita",
+	"description": "eqrXMG_opisWithZgloszenie__text",
+	"basic_params": ".tUiiNa_informacje",
+	"detailed_params": ".OemyKG_content__dane",
+	"localization": "._CnO5G_info__adres",
+	"main_img": ".f3AAma_zdjecieGlowne img",
+	"tile_link": ".lEAnAW_link"
 	}
 
 	def __init__(self, html: str | bytes, offer_id:str):
@@ -60,7 +61,7 @@ class OffersScraper:
 			return None
 
 		soup = BeautifulSoup(html, "html.parser")
-		link_el = ".t_DFuFiS"
+		link_el = cls.SELECTORS["tile_link"]
 		links = soup.select(link_el)
 		hrefs = ["https://tabelaofert.pl"+link.get("href") for link in links]
 		return hrefs
@@ -79,10 +80,10 @@ class OffersScraper:
 		return  ""
 
 	def get_price(self) -> int | None:
-		return OfferFormat.parse_int(self._text("price"))
+		return FiltersFormat.parse_int(self._text("price"))
 
 	def get_all_data(self) -> RawOfferData:
-		
+
 		return {
 			"offer_id": self.offer_id,
 			"title": self._text("title"),
@@ -91,7 +92,7 @@ class OffersScraper:
 			"unstructured_desc": self.get_description()
 		}
 
- 
+
 	def get_description(self) -> str:
 		lines = [
 			f"1. Localization: {self._text('localization')}",

@@ -1,0 +1,22 @@
+[project]
+name = "chatbot"
+version = "0.1.0"
+authors = [
+    { name = "Arcus72", email = "kimla.maciej72@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "dotenv>=0.9.9",
+    "ipython>=9.18.1",
+    "langchain-core>=1.7.4",
+    "langchain-google-genai>=4.4.2",
+    "langgraph>=1.2.19",
+    "psycopg2-binary>=2.9.13",
+]
+
+
+[build-system]
+requires = ["uv_build>=0.13.7,<0.14.0"]
+build-backend = "uv_build"
+[tool.uv]
+package = false
